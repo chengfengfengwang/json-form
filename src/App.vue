@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import Form from "./components/Form.vue";
 import type { schemaType } from "./components/type";
 
@@ -73,13 +73,20 @@ const schema: schemaType = [
 ];
 // the same name to form dom's attribute
 // const formRef = ref(null);
-const formRef = ref<InstanceType<typeof Form> | null>(null);
-const getFormValue = () => {
-  console.log("---formValue is: ", formRef.value?.formModel);
-};
+// 通过ref获取Form组件的私有属性，来获取表单值
+// const formRef = ref<InstanceType<typeof Form> | null>(null);
+// const getFormValue = () => {
+//   console.log("---formValue is: ", formRef.value?.formModel);
+// };
+
+// 在sfc setup里使用ref去v-model
+// ref的初始值可以传递给form
+const formValue = ref({name: 'w', mobile: '1234'});
+
 </script>
 
 <template>
-  <Form :schema="schema" ref="formRef"></Form>
+  <h1>form value: {{formValue}}</h1>
+  <Form v-model="formValue" :schema="schema" ref="formRef"></Form>
   <el-button @click="getFormValue" type="primary">search</el-button>
 </template>

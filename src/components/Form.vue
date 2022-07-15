@@ -5,21 +5,27 @@ import type { schemaItemType, schemaType, selecTionsType } from "./type";
 
 export default defineComponent({
   props: {
+    modelValue: {
+      type: Object,
+      required: false
+    },
     schema: {
       type: Object as PropType<schemaType>,
       required: true,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       msg: "test",
     };
   },
-  setup(props, { expose }) {
+  setup(props, { expose, emit }) {
     const { schema } = props;
-    const formModel = reactive({});
+    const formModel = reactive(props.modelValue || {});
     watch(formModel, () => {
       console.log("---", formModel);
+      emit('update:modelValue', formModel)
     });
     const renderItem = (item: schemaItemType) => {
       const { label } = item;
